@@ -14,3 +14,7 @@ python get-pip.py
 
 pip install BeautifulSoup
 pip install Requests
+
+3) Install MysqlDb
+
+apt-get install python-mysqldb
