@@ -36,6 +36,7 @@ def executeQuery(query, notification, category):
     url = unicodedata.normalize('NFKD', notification["url"]).encode('utf-8')
     date = unicodedata.normalize('NFKD', notification["date"]).encode('utf-8')
     print title
+    
     try:
         # execute SQL query using execute() method.
         affected_rows = cursor.execute(query, (title, url, category, date))
