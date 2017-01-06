@@ -12,7 +12,7 @@ python get-pip.py
 
 2) Installing dependencies
 
-pip install BeautifulSoup
+pip install BeautifulSoup4
 pip install Requests
 
 3) Install MysqlDb
