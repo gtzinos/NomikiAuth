@@ -33,20 +33,26 @@ def executeQuery(query, notification, category):
     cursor = database.cursor()
 
     title = unicodedata.normalize('NFKD', notification["title"]).encode('utf-8')
-    url = unicodedata.normalize('NFKD', notification["url"]).encode('ascii','ignore')
-    date = unicodedata.normalize('NFKD', notification["date"]).encode('ascii','ignore')
+    url = unicodedata.normalize('NFKD', notification["url"]).encode('utf-8')
+    date = unicodedata.normalize('NFKD', notification["date"]).encode('utf-8')
     print title
-    # execute SQL query using execute() method.
-    cursor.execute(query, (title, url, category, date))
+    try:
+        # execute SQL query using execute() method.
+        affected_rows = cursor.execute(query, (title, url, category, date))
 
-    database.commit()
-    return cursor
+        database.commit()
+        return affected_rows
+    except MySQLdb.IntegrityError:
+        #database.rollback()
+        return 0
 
 
 #Global notifications list
 notifications = {}
 #New notifications list
 new_notifications = {}
+#Have new notifications ?
+have_new_notifications = False
 
 #CONSTANT with all urls to get notifications
 PAGE_URLS = {
@@ -106,6 +112,8 @@ def initializeNotifications():
         "library": {}
     }
 
+    global have_new_notifications
+    have_new_notifications = False
 def initializeNewNotifications():
     global new_notifications
     new_notifications = {
@@ -123,6 +131,9 @@ def initializeNewNotifications():
         "tomeas_poinikwn": {},
         "library": {}
     }
+
+    global have_new_notifications
+    have_new_notifications = False
 
 def getUrlContent(url):
     #Send request to get the page object
@@ -152,6 +163,7 @@ def getNotificationsForCategory(content, category_name):
     """
     global notifications
     global new_notifications
+    global have_new_notifications
     #Get tab content
     notifications_content = content.find('div', {'class': 'view-content'})
 
@@ -188,6 +200,7 @@ def getNotificationsForCategory(content, category_name):
                 "title": titleText,
                 "url": url
             }
+            have_new_notifications = True
 
         #Get the next available index number
         index += 1
@@ -214,31 +227,44 @@ def getNewNotifications():
             html_doc = getUrlContent(url + query_field + str(i))
             getNotificationsForCategory(html_doc, key)
 
+
+print "---- Scraper Started ----"
+
+print "Initialize Notifications objects"
 #Initialize notifications list
 initializeNotifications()
-#Sort by key
 
-#while True:
+print "Get Full notifications"
 getFullNotifications()
 
-for category in sorted(notifications):
-        for notification in sorted(notifications[category]):
-            print notifications[category][notification]["title"]
-            print notifications[category][notification]["date"] 
-            print notifications[category][notification]["url"]
+#print "Loop through all full notifications"
+#for category in sorted(notifications):
+#        for notification in sorted(notifications[category]):
+#            print notifications[category][notification]["title"]
+#            print notifications[category][notification]["date"] 
+#            print notifications[category][notification]["url"]
 
+print "While True"
 while(True):
-    getNewNotifications()
 
-    openDatabaseConnection()
+    if have_new_notifications:
+        print "Open database connection"
+        openDatabaseConnection()
 
-    for category in sorted(new_notifications):
-        for notification in sorted(new_notifications[category]):
-            query = "INSERT INTO announcements (title, url, category, date) VALUES (%s,%s,%s,%s)"
-            executeQuery(query,new_notifications[category][notification], category)
+        print "Loop through all new notifications"
+        for category in sorted(new_notifications):
+            for notification in sorted(new_notifications[category]):
+                query = "INSERT INTO announcements (title, url, category, date) VALUES (%s,%s,%s,%s)"
+                executeQuery(query,new_notifications[category][notification], category)
+        
+        print "Close database connection"
+        closeDatabaseConnection()
 
-    closeDatabaseConnection()
-
+    #print "Initialize the new notifications object"
     initializeNewNotifications()
 
-    time.sleep(600)
+    #print "Sleep for some seconds"
+    time.sleep(10)
+
+    #print "Repeat the proccess"
+    getNewNotifications()
