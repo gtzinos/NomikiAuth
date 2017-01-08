@@ -4,12 +4,12 @@
     if(true)//if(isset($_POST["category"]) && is_array($_POST["category"]))
     {
         header('Content-Type: application/json; charset=utf-8');
-        $ids     = array("kosmitia");
-        $inQuery = implode(',', array_fill(0, count($ids), '?'));
+        //$ids     = array("kosmitia");
+        //$inQuery = implode(',', array_fill(0, count($ids), '?'));
 
         $stmt = $connection->query(
             'SELECT *
-            FROM announcements
+            FROM announcements'
            // WHERE category IN(' . $inQuery . ')'
         );
 
