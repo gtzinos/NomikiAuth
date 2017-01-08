@@ -10,12 +10,12 @@
         $stmt = $connection->prepare(
             'SELECT *
             FROM announcements
-            WHERE category IN(' . $inQuery . ')'
+           // WHERE category IN(' . $inQuery . ')'
         );
 
         // bindvalue is 1-indexed, so $k+1
-        foreach ($ids as $k => $id)
-            $stmt->bindValue(($k+1), $id);
+        //foreach ($ids as $k => $id)
+          //  $stmt->bindValue(($k+1), $id);
 
         $stmt->execute();
 		
