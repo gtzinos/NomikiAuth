@@ -7,7 +7,7 @@
         $ids     = array("kosmitia");
         $inQuery = implode(',', array_fill(0, count($ids), '?'));
 
-        $stmt = $connection->prepare(
+        $stmt = $connection->query(
             'SELECT *
             FROM announcements
            // WHERE category IN(' . $inQuery . ')'
@@ -17,7 +17,7 @@
         //foreach ($ids as $k => $id)
           //  $stmt->bindValue(($k+1), $id);
 
-        $stmt->execute();
+       // $stmt->execute();
 		
 		/*
         while ($row = $stmt->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT)) {
