@@ -1,13 +1,21 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Home</ion-title>
+  <ion-navbar align-title="center">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ language == "gr" ? "Όλες οι ανακοινώσεις" : "Announcements"}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-      <ion-item (click)="getNotifications()" >
-        fdas
-      </ion-item>
-  </ion-list>
+  <ion-list [virtualScroll]="announcements">
+
+  <ion-item *virtualItem="let announcement" (click)="openAnnouncementView(announcement)">
+    <div [ngClass]="{'disabled-color': announcement.read}">{{ announcement.title }}</div>
+    <div [className]="'disabled-color font-14'">Ανακοινώσεις {{ getCategoryName(announcement.category) }}</div>
+    <div [className]="'disabled-color font-14'">Ημερομηνία: {{announcement.date}}</div>
+  </ion-item>
+
+</ion-list>
 </ion-content>
+

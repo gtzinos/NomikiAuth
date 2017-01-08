@@ -1,14 +1,16 @@
+import { announcements } from './globalVariables';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
+import { MenuPage } from '../pages/menu/menu';
+
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    TabsPage
+    MenuPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
@@ -17,7 +19,7 @@ import { TabsPage } from '../pages/tabs/tabs';
   entryComponents: [
     MyApp,
     HomePage,
-    TabsPage
+    MenuPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
 })
