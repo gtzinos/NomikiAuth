@@ -281,7 +281,7 @@ while(True):
             for notification in sorted(new_notifications[category]):
                 query = "INSERT INTO announcements (title, url, category, date) VALUES (%s,%s,%s,%s)"
                 executeQuery(query,new_notifications[category][notification], category)
-            if count(new_notifications[category]) > 0:
+            if len(new_notifications[category]) > 0:
                 sendOneSignalNotification(new_notifications[category], category)
         
         print "Close database connection"
