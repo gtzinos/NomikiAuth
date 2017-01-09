@@ -233,27 +233,32 @@ def getNewNotifications():
 print "---- Scraper Started ----"
 
 def sendOneSignalNotification(category_notifications,category_name):
+
+    print "--------One Signal Started--------- "
+
     header = {"Content-Type": "application/json; charset=utf-8",
-          "Authorization": "Basic NGEwMGZmMjItY2NkNy0xMWUzLTk5ZDUtMDAwYzI5NDBlNjJj"}
+          "Authorization": "ZjBhOTJkZDMtMmE1MS00MjUyLWEyYzYtOTE1NDQ1ZDc3MjA1"}
 
     payload = {
                 "app_id": "3b1c929b-b6e7-4107-9c5c-91ec58babc65",
                 "included_segments": ["All"],
                 "headings": {
-                    "gr": "Νέες Ανακοινώσεις", "en": "New Notifactions"
+                    "en": "New Notifactions"
                 },
                 "contents": {
-                    "gr": "κειμενο", "en": "text"
+                    "en": "text"
                 },
                 "data": {
                     "category": category_name,
                     "notifications": category_notifications
-                 }
-               }
+                }
+              }
     
     req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
     
     print(req.status_code, req.reason)
+
+    print "One Signal Done"
 
 print "Initialize Notifications objects"
 #Initialize notifications list
