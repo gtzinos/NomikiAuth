@@ -1,5 +1,6 @@
 import time
 import requests
+import json
 from bs4 import BeautifulSoup
 import MySQLdb
 import unicodedata
@@ -231,6 +232,29 @@ def getNewNotifications():
 
 print "---- Scraper Started ----"
 
+def sendOneSignalNotification(category_notifications,category_name):
+    header = {"Content-Type": "application/json; charset=utf-8",
+          "Authorization": "Basic NGEwMGZmMjItY2NkNy0xMWUzLTk5ZDUtMDAwYzI5NDBlNjJj"}
+
+    payload = {
+                "app_id": "3b1c929b-b6e7-4107-9c5c-91ec58babc65",
+                "included_segments": ["All"],
+                "headings": {
+                    "gr": "Νέες Ανακοινώσεις", "en": "New Notifactions"
+                },
+                "contents": {
+                    "gr": "κειμενο", "en": "text"
+                },
+                "data": {
+                    "category": category_name,
+                    "notifications": category_notifications
+                 }
+               }
+    
+    req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
+    
+    print(req.status_code, req.reason)
+
 print "Initialize Notifications objects"
 #Initialize notifications list
 initializeNotifications()
@@ -257,6 +281,7 @@ while(True):
             for notification in sorted(new_notifications[category]):
                 query = "INSERT INTO announcements (title, url, category, date) VALUES (%s,%s,%s,%s)"
                 executeQuery(query,new_notifications[category][notification], category)
+            sendOneSignalNotification(new_notifications[category], category)
         
         print "Close database connection"
         closeDatabaseConnection()
