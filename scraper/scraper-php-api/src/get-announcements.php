@@ -3,7 +3,7 @@
     
     $httpBody = file_get_contents('php://input');
 
-    $parameters = $httpBody,true;
+    $parameters = $httpBody;
     
     if(isset($parameters["all"]))
     {
