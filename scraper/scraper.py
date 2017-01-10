@@ -55,6 +55,8 @@ notifications = {}
 new_notifications = {}
 #Have new notifications ?
 have_new_notifications = False
+#Count new notifications
+count_new_notifications = 0
 
 #CONSTANT with all urls to get notifications
 PAGE_URLS = {
@@ -137,6 +139,9 @@ def initializeNewNotifications():
     global have_new_notifications
     have_new_notifications = False
 
+    global count_new_notifications
+    count_new_notifications = 0
+
 def getUrlContent(url):
     #Send request to get the page object
     response = requests.get(url)
@@ -166,6 +171,7 @@ def getNotificationsForCategory(content, category_name):
     global notifications
     global new_notifications
     global have_new_notifications
+    global count_new_notifications
     #Get tab content
     notifications_content = content.find('div', {'class': 'view-content'})
 
@@ -203,6 +209,7 @@ def getNotificationsForCategory(content, category_name):
                 "url": url
             }
             have_new_notifications = True
+            count_new_notifications += 1
 
         #Get the next available index number
         index += 1
@@ -232,25 +239,24 @@ def getNewNotifications():
 
 print "---- Scraper Started ----"
 
-def sendOneSignalNotification(category_notifications,category_name):
+def sendOneSignalNotification(counter):
 
-    print "--------One Signal Started--------- "
+    print "--------One Signal Started--------"
 
     header = {"Content-Type": "application/json; charset=utf-8",
-          "Authorization": "ZjBhOTJkZDMtMmE1MS00MjUyLWEyYzYtOTE1NDQ1ZDc3MjA1"}
+          "Authorization": "Basic ZjBhOTJkZDMtMmE1MS00MjUyLWEyYzYtOTE1NDQ1ZDc3MjA1"}
 
     payload = {
                 "app_id": "3b1c929b-b6e7-4107-9c5c-91ec58babc65",
                 "included_segments": ["All"],
                 "headings": {
-                    "en": "New Notifactions"
+                    "en": "Ενημέρωση"
                 },
                 "contents": {
-                    "en": "text"
+                    "en": "Βρέθηκαν " + str(counter) + " νέες ανακοινώσεις."
                 },
                 "data": {
-                    "category": category_name,
-                    "notifications": category_notifications
+                    "counter": counter
                 }
               }
     
@@ -258,7 +264,7 @@ def sendOneSignalNotification(category_notifications,category_name):
     
     print(req.status_code, req.reason)
 
-    print "One Signal Done"
+    print "--------One Signal Done--------"
 
 print "Initialize Notifications objects"
 #Initialize notifications list
@@ -286,11 +292,12 @@ while(True):
             for notification in sorted(new_notifications[category]):
                 query = "INSERT INTO announcements (title, url, category, date) VALUES (%s,%s,%s,%s)"
                 executeQuery(query,new_notifications[category][notification], category)
-            if len(new_notifications[category]) > 0:
-                sendOneSignalNotification(new_notifications[category], category)
         
         print "Close database connection"
         closeDatabaseConnection()
+
+        if count_new_notifications > 0:
+            sendOneSignalNotification(count_new_notifications)
 
     #print "Initialize the new notifications object"
     initializeNewNotifications()
