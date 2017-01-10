@@ -3,7 +3,7 @@
     
     $httpBody = file_get_contents('php://input');
 
-    $parameters = json_decode($httpBody,true);
+    $parameters = $httpBody,true;
     
     if(isset($parameters["all"]))
     {
