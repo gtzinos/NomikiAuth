@@ -26,13 +26,13 @@ export class HomePage {
   {
       if(globalVariables.announcements == null)
       {
-          var url = "http://www.auth.l2koo.com/NomikiAuth/scraper/scraper-php-api/src/get-announcements.php";
-          this.http.post(url, {}).map(res => res.json())
+          var url = "http://localhost/scraper-php-api/src/get-announcements.php";
+          this.http.post(url, JSON.stringify({"all": true})).map(res => res.json())
           .subscribe(
                 data => {
                     
                     globalVariables.setAnnouncements(data);
-                    this.announcements = globalVariables.announcements;
+                    this.announcements = globalVariables.announcements; 
                     
                 },
                 err => {

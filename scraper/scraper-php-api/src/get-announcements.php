@@ -1,7 +1,7 @@
 <?php
     include "../config/config.php";
-    
-    $httpBody = file_get_contents('php://input');
+
+    $httpBody = json_decode(file_get_contents('php://input', true));
 
     $parameters = $httpBody;
     
