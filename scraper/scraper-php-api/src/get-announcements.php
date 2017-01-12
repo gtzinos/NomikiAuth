@@ -1,11 +1,11 @@
 <?php
     include "../config/config.php";
 
-    $httpBody = json_decode(file_get_contents('php://input', true));
+    //$httpBody = json_decode(file_get_contents('php://input', true));
 
-    $parameters = $httpBody;
+   // $parameters = $httpBody;
     
-    if(isset($parameters["all"]))
+    if(isset($_POST["all"]))
     {
         header('Content-Type: application/json; charset=utf-8');
 
@@ -18,7 +18,7 @@
         $stmt = null;
     }
     //Select all categories
-    else if(isset($parameters["category"]) && is_array($parameters["category"]))
+    else if(isset($_POST["category"]) && is_array($_POST["category"]))
     {
         header('Content-Type: application/json; charset=utf-8');
         $ids     = array("kosmitia");
