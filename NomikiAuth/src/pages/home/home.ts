@@ -2,7 +2,7 @@ import { Nav, Platform } from 'ionic-angular';
 import { AnnouncementPage } from './../announcement/announcement';
 import { language, announcements } from './../../app/globalVariables';
 import { Component } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as globalVariables from '../../app/globalVariables';
 import { InAppBrowser } from 'ionic-native';
@@ -21,13 +21,13 @@ export class HomePage {
   }
 
   ionViewWillEnter()
-  
- // test()
   {
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
       if(globalVariables.announcements == null)
       {
-          var url = "http://localhost/scraper-php-api/src/get-announcements.php";
-          this.http.post(url, JSON.stringify({"all": true})).map(res => res.json())
+          var url = "http://www.auth.l2koo.com/NomikiAuth/scraper/scraper-php-api/src/get-announcements.php";
+          this.http.post(url, {"all": true},options).map(res => res.json())
           .subscribe(
                 data => {
                     
