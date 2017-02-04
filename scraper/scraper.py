@@ -182,7 +182,11 @@ def getNotificationsForCategory(content, category_name):
     for notification_div in notifications_content.find_all('div', {'class': 'views-row'}):
         #Get date text
         
-        dateText = notification_div.find('div', {'class': 'views-field-created'}).find('span').text
+        fullDateText = notification_div.find('div', {'class': 'views-field-created'}).find('span').text
+
+        splitFullDateArray = fullDateText.split(" ")
+
+        dateText = splitFullDateArray.split("/")[2] + "-" + splitFullDateArray.split("/")[1] + "-" + splitFullDateArray.split("/")[0] + " " + splitFullDateArray[3]
 
         #Get title text
         titleText = notification_div.find('div', {'class': 'views-field-title'}).find('span').text
