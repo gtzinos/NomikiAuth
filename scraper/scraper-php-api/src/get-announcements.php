@@ -1,11 +1,9 @@
 <?php
     include "../config/config.php";
 
-    //$httpBody = json_decode(file_get_contents('php://input', true));
-
-   // $parameters = $httpBody;
+    $parameters = json_decode(file_get_contents('php://input', true));
     
-    if(isset($_POST["all"]))
+    if(isset($parameters->all))
     {
         header('Content-Type: application/json; charset=utf-8');
 
