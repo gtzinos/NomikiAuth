@@ -145,7 +145,7 @@ def initializeNewNotifications():
 def getUrlContent(url):
     #Send request to get the page object
     response = requests.get(url)
-    #Get the content
+    #Get the content 
     html = response.content
     #Parse it using the BeautifulSoup library
     soup = BeautifulSoup(html, "html.parser")
