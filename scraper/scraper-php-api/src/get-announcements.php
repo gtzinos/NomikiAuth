@@ -9,7 +9,7 @@
 
         $stmt = $connection->query(
             'SELECT *
-            FROM announcements'
+            FROM announcements order by date'
         );
 
 		echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
@@ -25,7 +25,7 @@
         $stmt = $connection->query(
             'SELECT *
             FROM announcements
-            WHERE category IN(' . $inQuery . ')'
+            WHERE category IN(' . $inQuery . ') order by date'
         );
 
         // bindvalue is 1-indexed, so $k+1
