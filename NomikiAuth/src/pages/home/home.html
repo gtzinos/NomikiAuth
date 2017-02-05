@@ -1,8 +1,8 @@
 <ion-header>
   <ion-navbar align-title="center">
-    <button ion-button menuToggle>
+    <!--<button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
-    </button>
+    </button> -->
     <ion-title>{{ language == "gr" ? "Όλες οι ανακοινώσεις" : "Announcements"}}</ion-title>
     <ion-buttons end>
     <button ion-button icon-only (click)="openFilter($event)">
@@ -13,10 +13,10 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list [virtualScroll]="announcements">
+  <ion-list [virtualScroll]="announcements | filterArray: categories">
 
   <ion-item *virtualItem="let announcement" (click)="openAnnouncementView(announcement)">
-    <div id="title" [ngClass]="{'disabled-color': announcement.read}">{{ announcement.title }}</div>
+    <div id="title">{{ announcement.title }}</div>
     <div [className]="'disabled-color font-14'">Ανακοινώσεις {{ getCategoryName(announcement.category) }}</div>
     <div [className]="'disabled-color font-14'">Ημερομηνία: {{announcement.date}}</div>
   </ion-item>
