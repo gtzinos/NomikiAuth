@@ -8,6 +8,8 @@ import { InAppBrowser, File } from 'ionic-native';
 import { PopoverController } from 'ionic-angular';
 import { PopoverPage } from './popover';
 import { FilterArray } from '../../app/pipes/filterArray';
+import { LoadingController, Loading } from 'ionic-angular';
+import { AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -17,13 +19,18 @@ export class HomePage {
   private announcements;
   private language: any;
   private categories;
+  private loader: Loading;
 
-  constructor(private http: Http, private nav: Nav, private platform: Platform, public popoverCtrl: PopoverController) {
+  constructor(private http: Http, private nav: Nav, private platform: Platform, public popoverCtrl: PopoverController, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
     this.http = http;
     this.language = globalVariables.language;
     this.platform = platform;
     this.categories = globalVariables.categoriesObj;
-    this.announcements = globalVariables.announcements; 
+    this.announcements = globalVariables.announcements;
+    this.loader = this.loadingCtrl.create({
+      content: "Παρακαλώ περιμένετε..."
+    });
+    this.loader.present();
   }
 
   openFilter(eventObj)
@@ -62,10 +69,18 @@ export class HomePage {
                     let fs = cordova.file.dataDirectory;
                     File.writeFile(fs, "announcements", JSON.stringify(announcements), {replace: true}).then( _ => {
                       console.log("ok");
-                    })
+                    });
+                    this.loader.dismiss();
                 },
                 err => {
                     console.log(err);
+                    this.loader.dismiss();
+                    this.alertCtrl.create({
+                      title: 'Πρόβλημα σύνδεσης με τον διακομιστη!',
+                      subTitle: err,
+                      buttons: ['OK']
+                    }).present();
+                    
                 }
                 //,
               //() => console.log('Movie Search Complete')
@@ -73,7 +88,7 @@ export class HomePage {
        }
        else
        {
-         this.announcements = globalVariables.announcements;
+         this.loader.dismiss();
        }
   } 
 
