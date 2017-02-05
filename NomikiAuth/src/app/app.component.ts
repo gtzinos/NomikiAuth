@@ -7,7 +7,6 @@ import { MenuPage } from '../pages/menu/menu';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as globalVariables from './globalVariables';
-import {enableProdMode} from '@angular/core';
 
 
 @Component({
@@ -18,7 +17,6 @@ export class MyApp {
 
   constructor(platform: Platform) {
     platform.ready().then(() => {
-      enableProdMode();
       let fs:string = cordova.file.dataDirectory;
 
       //Initialize announcements
