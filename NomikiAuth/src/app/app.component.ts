@@ -7,6 +7,7 @@ import { MenuPage } from '../pages/menu/menu';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as globalVariables from './globalVariables';
+import {enableProdMode} from '@angular/core';
 
 
 @Component({
@@ -17,12 +18,12 @@ export class MyApp {
 
   constructor(platform: Platform) {
     platform.ready().then(() => {
-
-      let fs:string = cordova.file.externalApplicationStorageDirectory;
+      enableProdMode();
+      let fs:string = cordova.file.dataDirectory;
 
       //Initialize announcements
       File.readAsText(fs, "announcements").then(data => {
-        if(Object.prototype.toString.call(data) == '[object String]' ) {
+       if(Object.prototype.toString.call(data) == '[object String]' ) {
           globalVariables.setAnnouncements(JSON.parse(data.toString()));
         }
       });
@@ -48,7 +49,7 @@ export class MyApp {
                     
                     globalVariables.setAnnouncements(data);
 
-                    File.writeFile(fs, "announcements", JSON.stringify(data), {'append': false});
+                    File.writeFile(fs, "announcements", JSON.stringify(data), true);
                 },
                 err => {
                     console.log(err);
