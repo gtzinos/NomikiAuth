@@ -7,9 +7,9 @@ import * as globalVariables from '../../app/globalVariables';
   template: `
     <ion-list>
       <ion-list-header>Κατηγορίες</ion-list-header>
-      <ion-item *ngFor="let category of categoriesArray" (click)="changeFilter(category, categoriesObj[category].checked)">
+      <ion-item *ngFor="let category of categoriesArray">
         <ion-label>{{categoriesObj[category].name[language]}}</ion-label>
-        <ion-checkbox [(ngModel)]="categoriesObj[category].checked"></ion-checkbox>
+        <ion-checkbox (ionChange)="changeFilter(category, categoriesObj[category].checked)" [(ngModel)]="categoriesObj[category].checked"></ion-checkbox>
       </ion-item>
     </ion-list>
   `
