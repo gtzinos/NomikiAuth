@@ -1,13 +1,13 @@
 import { Nav, Platform } from 'ionic-angular';
 import { AnnouncementPage } from './../announcement/announcement';
-import { language, announcements } from './../../app/globalVariables';
 import { Component } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as globalVariables from '../../app/globalVariables';
-import { InAppBrowser } from 'ionic-native';
+import { InAppBrowser, File } from 'ionic-native';
 import { PopoverController } from 'ionic-angular';
 import { PopoverPage } from './popover';
+import { FilterArray } from '../../app/pipes/filterArray';
 
 @Component({
   selector: 'page-home',
@@ -16,10 +16,13 @@ import { PopoverPage } from './popover';
 export class HomePage {
   private announcements;
   private language: any;
+  private categories;
+
   constructor(private http: Http, private nav: Nav, private platform: Platform, public popoverCtrl: PopoverController) {
     this.http = http;
     this.language = globalVariables.language;
     this.platform = platform;
+    this.categories = globalVariables.categoriesObj;
   }
 
   openFilter(eventObj)
@@ -28,13 +31,23 @@ export class HomePage {
     popover.present({
       ev: eventObj
     });
+  
+    popover.onDidDismiss(data => {
+      this.categories = JSON.parse(JSON.stringify(globalVariables.categoriesObj));
+      
+      let fs = cordova.file.externalApplicationStorageDirectory;
+      let categoriesTemp = this.categories;
+      File.writeFile(fs, "categories", JSON.stringify(this.categories), {'append': false}).then( _ => {
+        console.log("ok");
+      })
+    });
   }
 
   ionViewWillEnter()
   {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-      if(globalVariables.announcements == null)
+      if(globalVariables.announcements == null || globalVariables.announcements.length == 0)
       {
           var url = "http://www.auth.l2koo.com/NomikiAuth/scraper/scraper-php-api/src/get-announcements.php";
           this.http.post(url, {"all": true},options).map(res => res.json())
@@ -43,7 +56,11 @@ export class HomePage {
                     
                     globalVariables.setAnnouncements(data);
                     this.announcements = globalVariables.announcements; 
-                    
+                    // Use Cordova
+                    let fs = cordova.file.externalApplicationStorageDirectory;
+                    File.writeFile(fs, "announcements", JSON.stringify(data), {'append': false}).then( _ => {
+                      console.log("ok");
+                    })
                 },
                 err => {
                     console.log(err);
@@ -56,16 +73,13 @@ export class HomePage {
        {
          this.announcements = globalVariables.announcements;
        }
-  }
-  
+  } 
+
   openAnnouncementView(announcement)
   {
-    //this.nav.setRoot(AnnouncementPage,{"announcement": announcement});
     this.platform.ready().then(() => {
       new InAppBrowser("http://www.law.auth.gr" + announcement.url, '_system');
-      console.log(globalVariables.announcements[announcement.category]);
-      //globalVariables.announcements[announcement.category][announcement.url].read = true;
-      announcement.read = true;
+      //announcement.read = true;
     });
   }
 
