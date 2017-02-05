@@ -6,6 +6,8 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as globalVariables from '../../app/globalVariables';
 import { InAppBrowser } from 'ionic-native';
+import { PopoverController } from 'ionic-angular';
+import { PopoverPage } from './popover';
 
 @Component({
   selector: 'page-home',
@@ -14,10 +16,18 @@ import { InAppBrowser } from 'ionic-native';
 export class HomePage {
   private announcements;
   private language: any;
-  constructor(private http: Http, private nav: Nav, private platform: Platform) {
+  constructor(private http: Http, private nav: Nav, private platform: Platform, public popoverCtrl: PopoverController) {
     this.http = http;
     this.language = globalVariables.language;
     this.platform = platform;
+  }
+
+  openFilter(eventObj)
+  {
+    let popover = this.popoverCtrl.create(PopoverPage);
+    popover.present({
+      ev: eventObj
+    });
   }
 
   ionViewWillEnter()
