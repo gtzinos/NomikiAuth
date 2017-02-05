@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
+import { StatusBar, Splashscreen, File } from 'ionic-native';
 
 import { MenuPage } from '../pages/menu/menu';
+
+import { Http, Headers, RequestOptions } from '@angular/http';
+import 'rxjs/add/operator/map';
+import * as globalVariables from './globalVariables';
 
 
 @Component({
@@ -13,12 +17,46 @@ export class MyApp {
 
   constructor(platform: Platform) {
     platform.ready().then(() => {
+
+      let fs:string = cordova.file.externalApplicationStorageDirectory;
+
+      //Initialize announcements
+      File.readAsText(fs, "announcements").then(data => {
+        if(Object.prototype.toString.call(data) == '[object String]' ) {
+          globalVariables.setAnnouncements(JSON.parse(data.toString()));
+        }
+      });
+
+      //Initialize categogies
+      File.readAsText(fs, "categories").then(data => {
+        if(Object.prototype.toString.call(data) == '[object String]' ) {
+          globalVariables.setCategories(JSON.parse(data.toString()));
+        }
+      });
+
       //One Signal
       // Enable to debug issues.
       // window["plugins"].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
   
       var notificationOpenedCallback = function(jsonData) {
-        console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
+          let headers = new Headers({ 'Content-Type': 'application/json' });
+          let options = new RequestOptions({ headers: headers });
+          var url = "http://www.auth.l2koo.com/NomikiAuth/scraper/scraper-php-api/src/get-announcements.php";
+          this.http.post(url, {"all": true},options).map(res => res.json())
+          .subscribe(
+                data => {
+                    
+                    globalVariables.setAnnouncements(data);
+
+                    File.writeFile(fs, "announcements", JSON.stringify(data), {'append': false});
+                },
+                err => {
+                    console.log(err);
+                }
+                //,
+              //() => console.log('Movie Search Complete')
+          );
+          console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
       };
 
       window["plugins"].OneSignal
