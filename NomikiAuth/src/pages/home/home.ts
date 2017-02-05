@@ -1,3 +1,4 @@
+import { announcements } from './../../app/globalVariables';
 import { Nav, Platform } from 'ionic-angular';
 import { AnnouncementPage } from './../announcement/announcement';
 import { Component } from '@angular/core';
@@ -35,9 +36,9 @@ export class HomePage {
     popover.onDidDismiss(data => {
       this.categories = JSON.parse(JSON.stringify(globalVariables.categoriesObj));
       
-      let fs = cordova.file.externalApplicationStorageDirectory;
+      let fs = cordova.file.dataDirectory
       let categoriesTemp = this.categories;
-      File.writeFile(fs, "categories", JSON.stringify(this.categories), {'append': false}).then( _ => {
+      File.writeFile(fs, "categories", JSON.stringify(categoriesTemp), {replace: true}).then( _ => {
         console.log("ok");
       })
     });
@@ -57,8 +58,9 @@ export class HomePage {
                     globalVariables.setAnnouncements(data);
                     this.announcements = globalVariables.announcements; 
                     // Use Cordova
-                    let fs = cordova.file.externalApplicationStorageDirectory;
-                    File.writeFile(fs, "announcements", JSON.stringify(data), {'append': false}).then( _ => {
+                    let announcements = data;
+                    let fs = cordova.file.dataDirectory;
+                    File.writeFile(fs, "announcements", JSON.stringify(announcements), {replace: true}).then( _ => {
                       console.log("ok");
                     })
                 },
