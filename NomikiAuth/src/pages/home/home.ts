@@ -1,4 +1,3 @@
-import { announcements } from './../../app/globalVariables';
 import { Nav, Platform } from 'ionic-angular';
 import { AnnouncementPage } from './../announcement/announcement';
 import { Component } from '@angular/core';
@@ -24,6 +23,7 @@ export class HomePage {
     this.language = globalVariables.language;
     this.platform = platform;
     this.categories = globalVariables.categoriesObj;
+    this.announcements = globalVariables.announcements; 
   }
 
   openFilter(eventObj)

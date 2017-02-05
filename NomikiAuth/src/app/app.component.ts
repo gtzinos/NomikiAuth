@@ -13,8 +13,8 @@ import * as globalVariables from './globalVariables';
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage = MenuPage;
-
+  //rootPage = MenuPage;
+private rootPage;
   constructor(platform: Platform) {
     platform.ready().then(() => {
       let fs:string = cordova.file.dataDirectory;
@@ -23,6 +23,7 @@ export class MyApp {
       File.readAsText(fs, "announcements").then(data => {
        if(Object.prototype.toString.call(data) == '[object String]' ) {
           globalVariables.setAnnouncements(JSON.parse(data.toString()));
+          this.rootPage = MenuPage;
         }
       });
 
