@@ -113,5 +113,10 @@ export var categoriesObj = {
 
 export function setSelectedCategories(category_name, checked)
 {
-    categoriesObj[category_name].name[language] = checked;
+    categoriesObj[category_name].checked = checked;
+}
+
+export function setCategories(categories)
+{
+    categoriesObj = categories;
 }
