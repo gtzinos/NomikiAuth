@@ -24,6 +24,8 @@ private rootPage;
        if(Object.prototype.toString.call(data) == '[object String]' ) {
           globalVariables.setAnnouncements(JSON.parse(data.toString()));
         }
+
+        this.rootPage = MenuPage;
       })
       .catch(err => {
         console.log(err);
