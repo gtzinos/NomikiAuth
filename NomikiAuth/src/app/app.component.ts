@@ -15,7 +15,8 @@ import * as globalVariables from './globalVariables';
 export class MyApp {
   //rootPage = MenuPage;
 private rootPage;
-  constructor(platform: Platform) {
+  constructor(platform: Platform, private http: Http) {
+    this.http = http;
     platform.ready().then(() => {
       let fs:string = cordova.file.dataDirectory;
 
