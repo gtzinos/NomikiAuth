@@ -29,12 +29,14 @@ private rootPage;
         console.log(err);
         this.rootPage = MenuPage;
       });
-      
+
       //Initialize categogies
       File.readAsText(fs, "categories").then(data => {
         if(Object.prototype.toString.call(data) == '[object String]' ) {
           globalVariables.setCategories(JSON.parse(data.toString()));
         }
+      }).catch(err => {
+        console.log(err);
       });
       //One Signal
       // Enable to debug issues.
@@ -50,7 +52,9 @@ private rootPage;
                     
                     globalVariables.setAnnouncements(data);
 
-                    File.writeFile(fs, "announcements", JSON.stringify(data), true);
+                    File.writeFile(fs, "announcements", JSON.stringify(data), true).catch(err=>{
+                        console.log(err);
+                    });
                 },
                 err => {
                     console.log(err);

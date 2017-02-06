@@ -47,6 +47,8 @@ export class HomePage {
       let categoriesTemp = this.categories;
       File.writeFile(fs, "categories", JSON.stringify(categoriesTemp), {replace: true}).then( _ => {
         console.log("ok");
+      }).catch(err=> {
+        console.log(err);
       })
     });
   }
@@ -69,6 +71,8 @@ export class HomePage {
                     let fs = cordova.file.dataDirectory;
                     File.writeFile(fs, "announcements", JSON.stringify(announcements), {replace: true}).then( _ => {
                       console.log("ok");
+                    }).catch(err=>{
+                        console.log(err);
                     });
                     this.loader.dismiss();
                 },
