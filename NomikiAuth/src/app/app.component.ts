@@ -23,17 +23,19 @@ private rootPage;
       File.readAsText(fs, "announcements").then(data => {
        if(Object.prototype.toString.call(data) == '[object String]' ) {
           globalVariables.setAnnouncements(JSON.parse(data.toString()));
-          this.rootPage = MenuPage;
         }
+      })
+      .catch(err => {
+        console.log(err);
+        this.rootPage = MenuPage;
       });
-
+      
       //Initialize categogies
       File.readAsText(fs, "categories").then(data => {
         if(Object.prototype.toString.call(data) == '[object String]' ) {
           globalVariables.setCategories(JSON.parse(data.toString()));
         }
       });
-
       //One Signal
       // Enable to debug issues.
       // window["plugins"].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
