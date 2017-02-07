@@ -33,6 +33,8 @@ export class HomePage {
     this.loader.present();
   }
 
+  
+
   openFilter(eventObj)
   {
     let popover = this.popoverCtrl.create(PopoverPage);
@@ -55,6 +57,33 @@ export class HomePage {
 
   ionViewWillEnter()
   {
+    let fs:string = cordova.file.dataDirectory;
+
+      //Initialize announcements
+      File.readAsText(fs, "announcements").then(data => {
+       if(Object.prototype.toString.call(data) == '[object String]' ) {
+          globalVariables.setAnnouncements(JSON.parse(data.toString()));
+          this.announcements = globalVariables.announcements; 
+          this.loader.dismiss();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        this.refreshData();
+      });
+
+      //Initialize categogies
+      File.readAsText(fs, "categories").then(data => {
+        if(Object.prototype.toString.call(data) == '[object String]' ) {
+          globalVariables.setCategories(JSON.parse(data.toString()));
+        }
+      }).catch(err => {
+        console.log(err);
+      });
+  } 
+
+  refreshData(){
+    let fs:string = cordova.file.dataDirectory;
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
       if(globalVariables.announcements == null || globalVariables.announcements.length == 0)
@@ -67,8 +96,8 @@ export class HomePage {
                     globalVariables.setAnnouncements(data);
                     this.announcements = globalVariables.announcements; 
                     // Use Cordova
+                    let fs:string = cordova.file.dataDirectory;
                     let announcements = data;
-                    let fs = cordova.file.dataDirectory;
                     File.writeFile(fs, "announcements", JSON.stringify(announcements), {replace: true}).then( _ => {
                       console.log("ok");
                     }).catch(err=>{
@@ -94,7 +123,7 @@ export class HomePage {
        {
          this.loader.dismiss();
        }
-  } 
+  }
 
   openAnnouncementView(announcement)
   {

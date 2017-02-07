@@ -5,6 +5,7 @@ import { HomePage } from '../pages/home/home';
 import { MenuPage } from '../pages/menu/menu';
 import { PopoverPage } from '../pages/home/popover';
 import { FilterArray } from './pipes/filterArray';
+import {AnnouncementsService} from '../providers/announcements';
 
 
 @NgModule({
@@ -25,6 +26,6 @@ import { FilterArray } from './pipes/filterArray';
     MenuPage,
     PopoverPage
   ],
-  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}]
+  providers: [{provide: ErrorHandler, useClass: IonicErrorHandler}, AnnouncementsService]
 })
 export class AppModule {}
