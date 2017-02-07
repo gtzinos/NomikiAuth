@@ -22,8 +22,7 @@ export class MyApp {
           announcementsService.GetAllAnnouncements();
           console.log('notificationOpenedCallback: ' + JSON.stringify(jsonData));
       };
-      
-  notificationOpenedCallback({});
+
       window["plugins"].OneSignal
         .startInit("3b1c929b-b6e7-4107-9c5c-91ec58babc65", "1049883997761")
         .handleNotificationOpened(notificationOpenedCallback)
