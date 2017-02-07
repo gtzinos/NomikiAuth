@@ -36,6 +36,11 @@ apt-get install python-mysqldb
 6) nano /etc/apache2/sites-available/000-default.conf
 7) sudo apt install php-curl 
 
+Keystore:
+
+- Alias: NomikiAuth
+- Pass: My simple pass
+
 
 
 
