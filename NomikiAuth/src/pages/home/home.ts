@@ -12,7 +12,7 @@ import { LoadingController, Loading } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 
 @Component({
-  selector: 'page-home',
+  selector: 'paage-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
@@ -47,33 +47,54 @@ export class HomePage {
       
       let fs = cordova.file.dataDirectory
       let categoriesTemp = this.categories;
-      File.writeFile(fs, "categories", JSON.stringify(categoriesTemp), {replace: true}).then( _ => {
+      File.writeFile(fs, "categories.txt", JSON.stringify(categoriesTemp), {replace: true}).then( _ => {
         console.log("ok");
       }).catch(err=> {
         console.log(err);
       })
     });
   }
+    
+  notificationOpenedCallback()
+  {
+    this.refreshData();
+  }
 
   ionViewWillEnter()
   {
-    let fs:string = cordova.file.dataDirectory;
+      //One Signal
+      // Enable to debug issues.
+      // window["plugins"].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
+  
+      window["plugins"].OneSignal
+        .startInit("3b1c929b-b6e7-4107-9c5c-91ec58babc65", "1049883997761")
+        .handleNotificationOpened(this.notificationOpenedCallback)
+        .endInit();
+
+      let fs:string = cordova.file.dataDirectory;
 
       //Initialize announcements
-      File.readAsText(fs, "announcements").then(data => {
+      File.readAsText(fs, "announcements.txt").then(data => {
        if(Object.prototype.toString.call(data) == '[object String]' ) {
           globalVariables.setAnnouncements(JSON.parse(data.toString()));
           this.announcements = globalVariables.announcements; 
           this.loader.dismiss();
-        }
+        }  
       })
       .catch(err => {
-        console.log(err);
-        this.refreshData();
+          console.log(err);
+          if(globalVariables.announcements == null || globalVariables.announcements.length == 0)
+          {
+            this.refreshData();
+          }
+          else
+          {
+            this.loader.dismiss();
+          }
       });
 
       //Initialize categogies
-      File.readAsText(fs, "categories").then(data => {
+      File.readAsText(fs, "categories.txt").then(data => {
         if(Object.prototype.toString.call(data) == '[object String]' ) {
           globalVariables.setCategories(JSON.parse(data.toString()));
         }
@@ -86,43 +107,37 @@ export class HomePage {
     let fs:string = cordova.file.dataDirectory;
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-      if(globalVariables.announcements == null || globalVariables.announcements.length == 0)
-      {
-          var url = "http://www.auth.l2koo.com/NomikiAuth/scraper/scraper-php-api/src/get-announcements.php";
-          this.http.post(url, {"all": true},options).map(res => res.json())
-          .subscribe(
-                data => {
-                    
-                    globalVariables.setAnnouncements(data);
-                    this.announcements = globalVariables.announcements; 
-                    // Use Cordova
-                    let fs:string = cordova.file.dataDirectory;
-                    let announcements = data;
-                    File.writeFile(fs, "announcements", JSON.stringify(announcements), {replace: true}).then( _ => {
-                      console.log("ok");
-                    }).catch(err=>{
-                        console.log(err);
-                    });
-                    this.loader.dismiss();
-                },
-                err => {
-                    console.log(err);
-                    this.loader.dismiss();
-                    this.alertCtrl.create({
-                      title: 'Πρόβλημα σύνδεσης με τον διακομιστη!',
-                      subTitle: err,
-                      buttons: ['OK']
-                    }).present();
-                    
-                }
-                //,
-              //() => console.log('Movie Search Complete')
-          );
-       }
-       else
-       {
-         this.loader.dismiss();
-       }
+      
+    var url = "http://www.auth.l2koo.com/NomikiAuth/scraper/scraper-php-api/src/get-announcements.php";
+    this.http.post(url, {"all": true},options).map(res => res.json())
+    .subscribe(
+          data => {
+              
+              globalVariables.setAnnouncements(data);
+              this.announcements = globalVariables.announcements; 
+              // Use Cordova
+              let fs:string = cordova.file.dataDirectory;
+              let announcements = data;
+              File.writeFile(fs, "announcements.txt", JSON.stringify(announcements), {replace: true}).then( _ => {
+                console.log("ok");
+              }).catch(err=>{
+                  console.log(err);
+              });
+              this.loader.dismiss();
+          },
+          err => {
+              console.log(err);
+              this.loader.dismiss();
+              this.alertCtrl.create({
+                title: 'Πρόβλημα σύνδεσης με τον διακομιστη!',
+                subTitle: err,
+                buttons: ['OK']
+              }).present();
+              
+          }
+          //,
+        //() => console.log('Movie Search Complete')
+    );
   }
 
   openAnnouncementView(announcement)
