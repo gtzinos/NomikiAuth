@@ -12,7 +12,7 @@ import { LoadingController, Loading } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 
 @Component({
-  selector: 'paage-home',
+  selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
