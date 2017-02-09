@@ -55,7 +55,7 @@ export class HomePage {
     
   notificationOpenedCallback()
   {
-    this.refreshData();
+    this.refreshData(null);
   }
 
   ionViewWillEnter()
@@ -91,7 +91,7 @@ export class HomePage {
           console.log(err);
           if(globalVariables.announcements == null || globalVariables.announcements.length == 0)
           {
-            this.refreshData();
+            this.refreshData(null);
           }
           else
           {
@@ -109,7 +109,7 @@ export class HomePage {
       });
   } 
 
-  refreshData(){
+  refreshData(refresher){
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
       
@@ -129,6 +129,10 @@ export class HomePage {
                   console.log(err);
               });
               this.loader.dismiss();
+              if(refresher != null)
+              {
+                refresher.complete();
+              }
           },
           err => {
               console.log(err);

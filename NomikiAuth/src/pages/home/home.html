@@ -13,6 +13,9 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-refresher (ionRefresh)="refreshData($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list [virtualScroll]="announcements | filterArray: categories">
 
   <ion-item *virtualItem="let announcement" (click)="openAnnouncementView(announcement)">
