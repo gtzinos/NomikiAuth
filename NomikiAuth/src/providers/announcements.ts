@@ -29,7 +29,7 @@ export class AnnouncementsService {
                 
                 globalVariables.setAnnouncements(data);
   
-                File.writeFile(fs, "announcements", JSON.stringify(data), true).catch(err=>{
+                File.writeFile(fs, "announcements.txt", JSON.stringify(data), true).catch(err=>{
                     console.log(err);
                 });
             },

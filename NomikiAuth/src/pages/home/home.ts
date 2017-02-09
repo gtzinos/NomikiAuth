@@ -65,13 +65,21 @@ export class HomePage {
       //One Signal
       // Enable to debug issues.
       // window["plugins"].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
-  
+    
       window["plugins"].OneSignal
         .startInit("3b1c929b-b6e7-4107-9c5c-91ec58babc65", "1049883997761")
         .handleNotificationOpened(this.notificationOpenedCallback)
         .endInit();
 
       let fs:string = cordova.file.dataDirectory;
+      
+      File.removeFile(fs, "announcements").catch(err=>{
+        console.log("Can't find any file with name announcements");
+      });
+
+      File.removeFile(fs, "categories").catch(err=>{
+        console.log("Can't find any file with name categories");
+      });
 
       //Initialize announcements
       File.readAsText(fs, "announcements.txt").then(data => {
