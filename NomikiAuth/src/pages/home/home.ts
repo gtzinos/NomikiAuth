@@ -1,5 +1,4 @@
 import { Nav, Platform } from 'ionic-angular';
-import { AnnouncementPage } from './../announcement/announcement';
 import { Component } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
@@ -7,7 +6,6 @@ import * as globalVariables from '../../app/globalVariables';
 import { InAppBrowser, File } from 'ionic-native';
 import { PopoverController } from 'ionic-angular';
 import { PopoverPage } from './popover';
-import { FilterArray } from '../../app/pipes/filterArray';
 import { LoadingController, Loading } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 
@@ -112,7 +110,6 @@ export class HomePage {
   } 
 
   refreshData(){
-    let fs:string = cordova.file.dataDirectory;
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
       

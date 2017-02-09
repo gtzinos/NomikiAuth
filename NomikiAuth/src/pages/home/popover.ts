@@ -1,4 +1,3 @@
-import { categoriesObj } from './../../app/globalVariables';
 import { Component } from '@angular/core';
 import { ViewController } from 'ionic-angular';
 import * as globalVariables from '../../app/globalVariables'; 

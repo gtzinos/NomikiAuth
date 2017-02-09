@@ -1,4 +1,3 @@
-import { announcements, language } from './../../app/globalVariables';
 import { Component, ViewChild } from '@angular/core';
 import { Nav } from 'ionic-angular'
 import { HomePage } from '../home/home';
