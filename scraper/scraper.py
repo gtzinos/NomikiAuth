@@ -75,7 +75,8 @@ PAGE_URLS = {
     "tomeas_poinikwn": "http://www.law.auth.gr/el/criminal",
     "library": "http://www.law.auth.gr/el/library/news"
 }
-def initializeNotifications():global notifications
+def initializeNotifications():
+    global notifications
     notifications = {
         "kosmitia": {},
         "tmimatos": {},
@@ -116,7 +117,7 @@ def initializeNotifications():global notifications
 
     cur = executeSelect("Select * from announcements")
 
-    rows = cur.fetchAll()
+    rows = cur.fetchall()
 
     for row in rows:
         title = row[0]
@@ -134,7 +135,7 @@ def initializeNotifications():global notifications
 
             notifications[category][url_code] = {
                 "date": date,
-                "title": titleText,
+                "title": title,
                 "url": url
             }
         
