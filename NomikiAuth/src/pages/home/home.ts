@@ -69,7 +69,7 @@ export class HomePage {
         .handleNotificationOpened(this.notificationOpenedCallback)
         .endInit();
 
-        window["plugins"].OneSignal.sendTag("developer", "george");
+      //window["plugins"].OneSignal.sendTag("developer", "george");
 
       let fs:string = cordova.file.dataDirectory;
       

@@ -283,9 +283,9 @@ def sendOneSignalNotification(counter):
                 "headings": {
                     "en": "Ενημέρωση"
                 },
-                "filters": [
-                    {"field": "tag", "key": "developer", "relation": "=", "value": "george"}
-                ],
+            #    "filters": [
+            #        {"field": "tag", "key": "developer", "relation": "=", "value": "george"}
+            #    ],
                 "contents": {
                     "en": "Βρέθηκαν " + str(counter) + " νέες ανακοινώσεις."
                 },
