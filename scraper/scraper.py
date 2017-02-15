@@ -176,6 +176,9 @@ def getNotificationsForCategory(content, category_name):
     #Get tab content
     notifications_content = content.find('div', {'class': 'view-content'})
 
+    if notifications_content is None:
+        return
+
     #Initialize indexes
     index = len(notifications[category_name])
 
