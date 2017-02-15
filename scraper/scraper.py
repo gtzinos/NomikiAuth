@@ -76,14 +76,6 @@ PAGE_URLS = {
     "library": "http://www.law.auth.gr/el/library/news"
 }
 def initializeNotifications():
-    #openDatabaseConnection()
-
-    #cur = executeSelect("Select * from announcements")
-
-    #cur.fetchAll()
-
-    #closeDatabaseConnection()
-
     global notifications
     notifications = {
         "kosmitia": {},
@@ -100,6 +92,7 @@ def initializeNotifications():
         "tomeas_poinikwn": {},
         "library": {}
     }
+
     global new_notifications
     new_notifications = {
         "kosmitia": {},
@@ -119,6 +112,36 @@ def initializeNotifications():
 
     global have_new_notifications
     have_new_notifications = False
+
+    openDatabaseConnection()
+
+    cur = executeSelect("Select * from announcements")
+
+    rows = cur.fetchall()
+
+    for row in rows:
+        title = row[0]
+        url = row[1]
+        category = row[2]
+        date = row[3]
+
+        count_slash = url.count("/")
+
+        match_slash = -1
+        for i in range(0, count_slash):
+            match_slash = url.index("/", match_slash+1)
+
+            url_code = str(url[match_slash+1:len(url)])
+
+            notifications[category][url_code] = {
+                "date": date,
+                "title": title,
+                "url": url
+            }
+        
+
+    closeDatabaseConnection()
+
 def initializeNewNotifications():
     global new_notifications
     new_notifications = {
@@ -260,6 +283,9 @@ def sendOneSignalNotification(counter):
                 "headings": {
                     "en": "Ενημέρωση"
                 },
+                "filters": [
+                    {"field": "tag", "key": "developer", "relation": "=", "value": "george"}
+                ],
                 "contents": {
                     "en": "Βρέθηκαν " + str(counter) + " νέες ανακοινώσεις."
                 },
