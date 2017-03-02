@@ -8,7 +8,7 @@
         header('Content-Type: application/json; charset=utf-8');
 
         $stmt = $connection->query(
-            'SELECT *
+            'SELECT title,url,category,DATE_FORMAT(STR_TO_DATE(date, "%Y-%m-%d %H:%i"), "%b %d %Y %h:%i %p") as date 
             FROM announcements order by date desc'
         );
 
