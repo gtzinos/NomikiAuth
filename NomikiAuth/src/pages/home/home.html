@@ -21,7 +21,7 @@
   <ion-item *virtualItem="let announcement" (click)="openAnnouncementView(announcement)">
     <div id="title">{{ announcement.title }}</div>
     <div [className]="'disabled-color font-14'">Ανακοινώσεις {{ getCategoryName(announcement.category) }}</div>
-    <div [className]="'disabled-color font-14'">Ημερομηνία: {{announcement.date}}</div>
+    <div [className]="'disabled-color font-14'">Ημερομηνία: {{announcement.dateFormat}}</div>
   </ion-item>
 
 </ion-list>
