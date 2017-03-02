@@ -1,5 +1,5 @@
 import { Nav, Platform } from 'ionic-angular';
-import { Component } from '@angular/core';
+import { Component , NgZone} from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import * as globalVariables from '../../app/globalVariables';
@@ -19,7 +19,7 @@ export class HomePage {
   private categories;
   private loader: Loading;
 
-  constructor(private http: Http, private nav: Nav, private platform: Platform, public popoverCtrl: PopoverController, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
+  constructor(private ngZone: NgZone, private http: Http, private nav: Nav, private platform: Platform, public popoverCtrl: PopoverController, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
     this.http = http;
     this.language = globalVariables.language;
     this.platform = platform;
@@ -55,7 +55,7 @@ export class HomePage {
     
   notificationOpenedCallback()
   {
-    this.refreshData(null);
+    this.refreshData();
   }
 
   ionViewWillEnter()
@@ -63,10 +63,48 @@ export class HomePage {
       //One Signal
       // Enable to debug issues.
       // window["plugins"].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
-    
+      let $this = this;
       window["plugins"].OneSignal
         .startInit("3b1c929b-b6e7-4107-9c5c-91ec58babc65", "1049883997761")
-        .handleNotificationOpened(this.notificationOpenedCallback)
+        .handleNotificationOpened(function() {
+             let headers = new Headers({ 'Content-Type': 'application/json' });
+              let options = new RequestOptions({ headers: headers });
+                
+              var url = "http://www.auth.l2koo.com/NomikiAuth/scraper/scraper-php-api/src/get-announcements.php";
+              $this.http.post(url, {"all": true},options).map(res => res.json())
+              .subscribe(
+                    data => {
+                        
+                  globalVariables.setAnnouncements(data);
+                  $this.ngZone.run(()=>{
+                      $this.announcements = data;
+                      console.log($this.announcements);
+                  })
+                  
+                  // Use Cordova
+                  let fs:string = cordova.file.dataDirectory;
+                  //let announcements = data;
+                  File.writeFile(fs, "announcements.txt", JSON.stringify($this.announcements), {replace: true}).then( _ => {
+                    console.log("ok");
+                  }).catch(err=>{
+                      console.log(err);
+                  });
+                  $this.loader.dismiss();
+              },
+              err => {
+                  console.log(err);
+                  this.loader.dismiss();
+                  this.alertCtrl.create({
+                    title: 'Πρόβλημα σύνδεσης με τον διακομιστη!',
+                    subTitle: err,
+                    buttons: ['OK']
+                  }).present();
+                  
+              }
+              //,
+            //() => console.log('Movie Search Complete')
+        );
+        })
         .endInit();
 
       //window["plugins"].OneSignal.sendTag("developer", "george");
@@ -111,7 +149,7 @@ export class HomePage {
       });
   } 
 
-  refreshData(refresher){
+  refreshData(refresher?){
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
       
@@ -121,11 +159,15 @@ export class HomePage {
           data => {
               
               globalVariables.setAnnouncements(data);
-              this.announcements = globalVariables.announcements; 
+              this.ngZone.run(()=>{
+                  this.announcements = data;
+                  console.log(this.announcements);
+              })
+              
               // Use Cordova
               let fs:string = cordova.file.dataDirectory;
-              let announcements = data;
-              File.writeFile(fs, "announcements.txt", JSON.stringify(announcements), {replace: true}).then( _ => {
+              //let announcements = data;
+              File.writeFile(fs, "announcements.txt", JSON.stringify(this.announcements), {replace: true}).then( _ => {
                 console.log("ok");
               }).catch(err=>{
                   console.log(err);
