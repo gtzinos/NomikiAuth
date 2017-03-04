@@ -6,9 +6,10 @@ Playstore app: https://play.google.com/store/apps/details?id=com.geotzinos.nomik
 
 #Setup:
 
-#Front-end Tutorial
+#Ionic 2 app Tutorial
 
 1) Download and install nodejs (Latest)
+https://nodejs.org/en/download/
 
 2) Install dependencies
 
@@ -55,6 +56,8 @@ apt-get install python-mysqldb
  sudo service apache2 restart
  
  sudo apt install php-curl
+4) Start scraper
+python ./scraper/scraper.py
 
 
 
