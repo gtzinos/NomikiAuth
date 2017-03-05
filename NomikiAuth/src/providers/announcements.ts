@@ -22,7 +22,7 @@ export class AnnouncementsService {
       let fs:string = cordova.file.dataDirectory;
       let headers = new Headers({ 'Content-Type': 'application/json' });
       let options = new RequestOptions({ headers: headers });
-      var url = "http://www.law.l2koo.com";
+      var url = "http://www.law.tzinos.me";
       this.http.post(url, {"all": true},options).map(res => res.json())
       .subscribe(
             data => {
