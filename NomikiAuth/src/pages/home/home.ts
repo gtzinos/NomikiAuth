@@ -19,19 +19,7 @@ export class HomePage {
   private categories;
   private loader: Loading;
 
-  constructor(private ngZone: NgZone, private http: Http, private nav: Nav, private platform: Platform, public popoverCtrl: PopoverController, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
-    this.http = http;
-    this.language = globalVariables.language;
-    this.platform = platform;
-    this.categories = globalVariables.categoriesObj;
-    this.announcements = globalVariables.announcements;
-    this.loader = this.loadingCtrl.create({
-      content: "Παρακαλώ περιμένετε..."
-    });
-    this.loader.present();
-  }
-
-  
+  constructor(private ngZone: NgZone, private http: Http, private nav: Nav, private platform: Platform, public popoverCtrl: PopoverController, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {  }
 
   openFilter(eventObj)
   {
@@ -60,6 +48,14 @@ export class HomePage {
 
   ionViewWillEnter()
   {
+    this.language = globalVariables.language;
+    this.categories = globalVariables.categoriesObj;
+    this.announcements = globalVariables.announcements;
+    this.loader = this.loadingCtrl.create({
+      content: "Παρακαλώ περιμένετε..."
+    });
+    this.loader.present();
+    
       //One Signal
       // Enable to debug issues.
       // window["plugins"].OneSignal.setLogLevel({logLevel: 4, visualLevel: 4});
