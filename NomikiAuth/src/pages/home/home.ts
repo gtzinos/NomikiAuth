@@ -66,7 +66,7 @@ export class HomePage {
       let $this = this;
       window["plugins"].OneSignal
         .startInit("3b1c929b-b6e7-4107-9c5c-91ec58babc65", "1049883997761")
-        .handleNotificationOpened(function() {
+        .handleNotificationReceived(function() {
              let headers = new Headers({ 'Content-Type': 'application/json' });
               let options = new RequestOptions({ headers: headers });
                 
