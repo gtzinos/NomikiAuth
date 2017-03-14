@@ -46,7 +46,7 @@ export class HomePage {
     this.refreshData();
   }
 
-  ionViewWillEnter()
+  ionViewDidLoad()
   {
     this.language = globalVariables.language;
     this.categories = globalVariables.categoriesObj;
