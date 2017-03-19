@@ -203,7 +203,7 @@ def getNotificationsForCategory(content, category_name):
     global notifications
     global new_notifications
     global have_new_notifications
-    global count_new_notification
+    global count_new_notifications
 
     #Get tab content
     notifications_content = content.find('div', {'class': 'view-content'})
