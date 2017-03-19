@@ -167,13 +167,16 @@ def initializeNewNotifications():
     count_new_notifications = 0
 
 def getUrlContent(url):
-    #Send request to get the page object
-    response = requests.get(url)
-    #Get the content 
-    html = response.content
-    #Parse it using the BeautifulSoup library
-    soup = BeautifulSoup(html, "html.parser")
-    return soup
+    try:
+        #Send request to get the page object
+        response = requests.get(url)
+        #Get the content 
+        html = response.content
+        #Parse it using the BeautifulSoup library
+        soup = BeautifulSoup(html, "html.parser")
+        return soup
+    except Exception as exc:
+        return None
 
 def getPageLength(content):
     pager = content.find("li", {"class": "pager-last"})
@@ -192,10 +195,16 @@ def getNotificationsForCategory(content, category_name):
     """
     Get notifications categories
     """
+
+    #Check content
+    if content is None:
+        return
+
     global notifications
     global new_notifications
     global have_new_notifications
-    global count_new_notifications
+    global count_new_notification
+
     #Get tab content
     notifications_content = content.find('div', {'class': 'view-content'})
 
