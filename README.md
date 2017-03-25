@@ -43,6 +43,10 @@ pip install Requests
 
 apt-get install python-mysqldb
 
+or
+
+sudo yum install MySQL-python (Redhat linux)
+
 3) Install apache2 php mysql
 
  sudo apt-get install apache2
