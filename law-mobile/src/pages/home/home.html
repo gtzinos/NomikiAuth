@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar align-title="center">
+    <!--<button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button> -->
+    <ion-title>{{ language == "gr" ? "Όλες οι ανακοινώσεις" : "Announcements"}}</ion-title>
+    <ion-buttons end>
+    <button ion-button icon-only (click)="openFilter($event)">
+      <ion-icon name="more"></ion-icon>
+    </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-refresher (ionRefresh)="refreshData($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list [virtualScroll]="announcements | filterArray: categories">
+
+  <ion-item *virtualItem="let announcement" (click)="openAnnouncementView(announcement)">
+    <div id="title">{{ announcement.title }}</div>
+    <div [className]="'disabled-color font-14'">Ανακοινώσεις {{ getCategoryName(announcement.category) }}</div>
+    <div [className]="'disabled-color font-14'">Ημερομηνία: {{announcement.dateFormat}}</div>
+  </ion-item>
+
+</ion-list>
+</ion-content>
+
