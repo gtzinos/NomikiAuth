@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import * as globalVariables from '../../app/globalVariables';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { PopoverController } from 'ionic-angular';
-import { PopoverPage } from './popover';
+import { PopoverPage } from './modal/popover';
 import { LoadingController, Loading } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { OneSignal } from '@ionic-native/onesignal';

@@ -1,5 +1,5 @@
+import { PopoverPage } from '../pages/home/modal/popover';
 import { FilterArray } from './pipes/filterArray';
-import { PopoverPage } from '../pages/home/popover';
 import { MenuPage } from '../pages/menu/menu';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -12,7 +12,7 @@ import { HomePage } from '../pages/home/home';
 
 @NgModule({
   declarations: [
-    MyApp
+    MyApp, PopoverPage
   ],
   imports: [
     BrowserModule,
@@ -20,7 +20,7 @@ import { HomePage } from '../pages/home/home';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp, PopoverPage
   ],
   providers: [
     StatusBar,
